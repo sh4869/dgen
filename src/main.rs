@@ -14,6 +14,7 @@ fn main() {
         .about("diary generator")
         .subcommand(SubCommand::with_name("ytd").about("generate diary template file of yesterday"))
         .subcommand(SubCommand::with_name("today").about("generate diary template file of yesterday"))
+        .subcommand(SubCommand::with_name("wserver").about("serve write server"))
         .arg(Arg::with_name("dest").short("d").long("dest").help("dest directory of generated dailies file").takes_value(true))
         .get_matches();
     let now = Local::now();
@@ -31,6 +32,8 @@ fn main() {
             Ok(false) => println!("Error: diary/{}.md already exists.", today.map_or("".to_string(), |r| r.format("%Y/%m/%d").to_string())),
             Err(e) => println!("Error: {}", e.to_string()),
         }
+    } else if matches.subcommand_matches("wserver").is_some() {
+        println("writing server starting...");
     } else {
         println!("building diary...");
         let dest = matches.value_of("dest").unwrap_or("docs");
